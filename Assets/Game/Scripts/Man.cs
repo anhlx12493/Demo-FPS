@@ -122,11 +122,11 @@ public class Man : Character
         {
             if (isRunning)
             {
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Vector3.Cross(hit.normal, Vector3.left).normalized), 1f * speed);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Vector3.Cross(hit.normal, new Vector3(-transform.forward.z, transform.forward.y,transform.forward.x)).normalized), 1f * speed);
             }
             else
             {
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Vector3.Cross(Vector3.up, Vector3.left).normalized), 1f * speed);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Vector3.Cross(Vector3.up, new Vector3(-transform.forward.z, transform.forward.y, transform.forward.x)).normalized), 1f * speed);
             }
         }
 

@@ -18,6 +18,15 @@ ModelImporter:
   - first:
       74: 3771464487664831772
     second: metarig|metarigAction (1)
+  - first:
+      74: -6596611835595237421
+    second: metarig|JumpDownStart
+  - first:
+      74: 9108395983056926428
+    second: metarig|JumpDownFling
+  - first:
+      74: -8634653437483647219
+    second: metarig|JumpDownLanding
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -47,11 +56,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: metarig|metarigAction (1)
-      takeName: metarig|metarigAction
+      name: metarig|JumpDownLanding
+      takeName: metarig|JumpDownLanding
       internalID: 0
       firstFrame: 0
-      lastFrame: 40
+      lastFrame: 25
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -61,8 +70,8 @@ ModelImporter:
       loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0

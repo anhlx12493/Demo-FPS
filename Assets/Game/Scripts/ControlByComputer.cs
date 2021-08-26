@@ -6,6 +6,8 @@ public class ControlByComputer : Controller
 {
     Animator animator;
 
+    float speed = 0f;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -17,18 +19,34 @@ public class ControlByComputer : Controller
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                animator.SetFloat("Speed", 2f);
+                speed += 0.1f;
+                if (speed > 2)
+                    speed = 2;
+                animator.SetFloat("Speed", speed);
                 character.isRunning = true;
             }
             else
             {
-                animator.SetFloat("Speed", 1f);
+                if (speed > 1)
+                {
+                    speed -= 0.1f;
+                    if (speed < 1)
+                        speed = 1;
+                }
+                else
+                {
+                    speed = 1;
+                }
+                animator.SetFloat("Speed", speed);
                 character.isRunning = false;
             }
         }
         else
         {
-            animator.SetFloat("Speed", 0f);
+            speed -= 0.1f;
+            if (speed < 0)
+                speed = 0;
+            animator.SetFloat("Speed", speed);
             character.isRunning = false;
         }
 

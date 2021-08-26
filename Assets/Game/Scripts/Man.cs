@@ -118,11 +118,15 @@ public class Man : Character
             animator.SetIKPosition(AvatarIKGoal.RightFoot, positionIKRight);
         }
 
-        if (isRunning)
+        if (Physics.Raycast(transform.position + transform.forward + Vector3.up * 3, Vector3.down, out hit, 6, layerHit))
         {
-            if (Physics.Raycast(transform.position + transform.forward + Vector3.up * 3, Vector3.down, out hit, 6, layerHit))
+            if (isRunning)
             {
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Vector3.Cross(hit.normal, Vector3.left).normalized), 1f * speed);
+            }
+            else
+            {
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Vector3.Cross(Vector3.up, Vector3.left).normalized), 1f * speed);
             }
         }
 

@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
+    [Range (0,1)][SerializeField] float lerp = 1;
     public Transform transformToFolow;
 
-    Vector3 localPositionFollow;
-
-    private void Awake()
-    {
-        localPositionFollow =  transform.position - transformToFolow.position;
-    }
+    [SerializeField] Vector3 localPositionFollow;
 
     void LateUpdate()
     {
-        transform.position = Vector3.Lerp(transform.position, transformToFolow.position + localPositionFollow, 1f);
+        UpdateFollow();
+    }
+
+    public void UpdateFollow()
+    {
+        transform.position = Vector3.Lerp(transform.position, transformToFolow.position + localPositionFollow, lerp);
     }
 }

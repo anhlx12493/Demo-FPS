@@ -27,6 +27,15 @@ ModelImporter:
   - first:
       74: -8634653437483647219
     second: metarig|JumpDownLanding
+  - first:
+      74: 4990016223898643773
+    second: metarig|HipRotateLeft
+  - first:
+      74: 7410322446253024956
+    second: metarig|HipRotateRight
+  - first:
+      74: 1570629931627062692
+    second: metarig|WalkLeft45
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -56,11 +65,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: metarig|JumpDownLanding
-      takeName: metarig|JumpDownLanding
+      name: metarig|WalkLeft45
+      takeName: metarig|WalkLeft45
       internalID: 0
       firstFrame: 0
-      lastFrame: 25
+      lastFrame: 40
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -71,7 +80,7 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 1
+      loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0

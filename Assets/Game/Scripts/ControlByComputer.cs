@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class ControlByComputer : Controller
 {
-    Animator animator;
-
-    float speed = 0f;
+    Transform transformCopyRotate;
 
     private void Awake()
     {
-        animator = GetComponent<Animator>();
+        character = GetComponent<Character>();
+        transformCopyRotate = new GameObject().transform;
+        transformCopyRotate.rotation = character.transform.rotation;
     }
 
     private void Update()
@@ -20,11 +20,37 @@ public class ControlByComputer : Controller
             character.MoveUp();
         }
 
+        if (Input.GetKey(KeyCode.S))
+        {
+            character.MoveDown();
+        }
+
         if (Input.GetKey(KeyCode.LeftShift))
         {
             character.Faster();
         }
 
-        character.transform.Rotate(0, Input.GetAxis("Mouse X"), 0);
+        if (Input.GetKey(KeyCode.A))
+        {
+            character.MoveLeft();
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            character.MoveRight();
+        }
+
+        transformCopyRotate.Rotate (-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
+        character.rotationLook = Quaternion.Euler(transformCopyRotate.rotation.eulerAngles.x, transformCopyRotate.rotation.eulerAngles.y, 0);
+        transformCopyRotate.rotation = character.rotationLook;
+    }
+
+    private void OnAnimatorIK(int layerIndex)
+    {
+
+        if (Input.GetMouseButton(0))
+        {
+            character.Shoot();
+        }
     }
 }

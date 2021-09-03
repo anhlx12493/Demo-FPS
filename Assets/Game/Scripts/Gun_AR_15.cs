@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MLAPI;
 
 public class Gun_AR_15 : Gun
 {
@@ -27,7 +28,8 @@ public class Gun_AR_15 : Gun
         {
             if (hitCollider.tag == "Character")
             {
-                Instantiate(prefabBlood, target, Quaternion.Euler(Vector3.zero));
+                GameObject go = Instantiate(prefabBlood, target, Quaternion.Euler(Vector3.zero));
+                go.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
                 Character character = hitCollider.GetComponentInParent<Character>();
                 if (character)
                 {
@@ -36,7 +38,8 @@ public class Gun_AR_15 : Gun
             }
             else
             {
-                Instantiate(prefabBullet, target, Quaternion.Euler(Vector3.zero));
+                GameObject go = Instantiate(prefabBullet, target, Quaternion.Euler(Vector3.zero));
+                go.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
             }
         }
         lineRenderer.enabled = true;

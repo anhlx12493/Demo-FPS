@@ -39,31 +39,6 @@ public class Man : Character
         MoveNormal();
     }
 
-    private void LateUpdate()
-    {
-        if (cameraFollow)
-        {
-            cameraFollow.transform.rotation = rotationLook;
-            Debug.DrawLine(Camera.main.transform.position + Camera.main.transform.forward * 4.5f, Camera.main.transform.position + Camera.main.transform.forward * 1000, Color.black);
-            if (Physics.Raycast(Camera.main.transform.position + Camera.main.transform.forward * 4.5f, Camera.main.transform.forward, out hit, 1000, layerAim))
-            {
-                targetAim = hit.point;
-                if (gunUsing)
-                {
-                    gunUsing.hitCollider = hit.collider;
-                }
-            }
-            else
-            {
-                targetAim = Camera.main.transform.position + Camera.main.transform.forward * 10;
-                if (gunUsing)
-                {
-                    gunUsing.hitCollider = null;
-                }
-            }
-        }
-    }
-
     private void OnAnimatorIK(int layerIndex)
     {
         if (gunUsing)
@@ -193,7 +168,6 @@ public class Man : Character
             if (copyTransform)
             {
                 transform.position = copyTransform.position;
-                cameraFollow.UpdateFollow();
             }
         }
     }
@@ -294,10 +268,6 @@ public class Man : Character
     void ActiveBehaviour(bool isActive)
     {
         isBehaviourAbleChange = isActive;
-        if (cameraFollow)
-        {
-            cameraFollow.enabled = isActive;
-        }
     }
 
     bool AimGun()

@@ -1,13 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MLAPI;
 
-public class AutoDestroy : MonoBehaviour
+public class AutoDestroy : NetworkBehaviour
 {
     public float time;
-    // Start is called before the first frame update
+
+
+    
+    private void OnServerInitialized()
+    {
+    }
     void Start()
     {
+        if (!IsServer)
+        {
+            Destroy(this);
+        }
         StartCoroutine(CoroutineWaitForSecond(time));
     }
 

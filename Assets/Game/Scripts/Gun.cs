@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MLAPI;
 
 
-public abstract class Gun : MonoBehaviour
+public abstract class Gun : NetworkBehaviour
 {
     [SerializeField] Transform transformGrip,transformForend;
     public Transform transformGunHolder, transformAim, transformBarrel;

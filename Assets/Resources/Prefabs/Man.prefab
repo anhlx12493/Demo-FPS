@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &89251206984133077
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5888443070538202022}
+  m_Layer: 6
+  m_Name: AimController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5888443070538202022
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89251206984133077}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.85, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 7014122606743994351}
+  m_Father: {fileID: 4897966764067247672}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &167575568769337824
 GameObject:
   m_ObjectHideFlags: 0
@@ -1240,6 +1271,36 @@ Transform:
   m_Father: {fileID: 1055590521207732694}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3542567590969934963
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7014122606743994351}
+  m_Layer: 6
+  m_Name: ViewCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7014122606743994351
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3542567590969934963}
+  m_LocalRotation: {x: 0.15550658, y: -0, z: -0, w: 0.9878349}
+  m_LocalPosition: {x: 0, y: 2.69, z: -4.69}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5888443070538202022}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 17.892, y: 0, z: 0}
 --- !u!1 &3742788319095265578
 GameObject:
   m_ObjectHideFlags: 0
@@ -1556,6 +1617,7 @@ Transform:
   - {fileID: 3840597768488118831}
   - {fileID: 5884757953621455047}
   - {fileID: 7662767111445574190}
+  - {fileID: 5888443070538202022}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1590,9 +1652,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4a483fcc029e054a9726a1ab9516db5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationLook: {x: 0, y: 0, z: 0, w: 0}
   gunUsing: {fileID: 8716949399475367522}
-  cameraFollow: {fileID: 0}
+  transformAimController: {fileID: 5888443070538202022}
+  transformCamera: {fileID: 7014122606743994351}
   targetAim: {x: 0, y: 0, z: 0}
   layerHit:
     serializedVersion: 2
@@ -1676,11 +1738,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7662767111445574190}
-  - component: {fileID: 8619347224711547552}
   - component: {fileID: 7088601001537902698}
   - component: {fileID: 5487927166669988033}
   m_Layer: 7
-  m_Name: MoveController
+  m_Name: Bounder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1700,19 +1761,6 @@ Transform:
   m_Father: {fileID: 4897966764067247672}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8619347224711547552
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5341539784208258372}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f2422ee8a6070342b271cf103a7439e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  transformToControl: {fileID: 0}
 --- !u!54 &7088601001537902698
 Rigidbody:
   m_ObjectHideFlags: 0

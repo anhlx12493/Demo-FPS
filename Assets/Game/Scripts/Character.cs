@@ -24,8 +24,6 @@ public abstract class Character : NetworkBehaviour
     }
     Behaviour _behaviour;
     protected bool isBehaviourAbleChange = true;
-    [HideInInspector]
-    public Quaternion rotationLook;
 
     public void SetBehaviour(Behaviour behaviour)
     {
@@ -38,7 +36,21 @@ public abstract class Character : NetworkBehaviour
     bool isIdle,isMoveLeft, isMoveRight, isMoveUp, isMoveDown, isFaster, isLowwer;
 
     public Gun gunUsing;
-    public CameraFollow cameraFollow;
+    public Transform transformAimController,transformCamera;
+    Vector3 localPositionTransformAimController;
+    public Vector3 positionStartAim {
+        get
+        {
+            return transformCamera.position + transformCamera.forward * 4.5f;
+        }
+    }
+    public Vector3 forwardAim
+    {
+        get
+        {
+            return transformCamera.forward;
+        }
+    }
 
     [HideInInspector]
     public Vector3 targetAim;
@@ -46,7 +58,7 @@ public abstract class Character : NetworkBehaviour
     protected RaycastHit hit;
     [SerializeField] protected LayerMask layerHit,layerAim;
 
-    private float _health, _maxHealth;
+    private float _health, _maxHealth = 1;
 
     public float health
     {
@@ -65,8 +77,18 @@ public abstract class Character : NetworkBehaviour
         }
     }
 
+    public Quaternion rotationLook
+    {
+        get
+        {
+            return transformAimController.rotation;
+        }
+    }
+
     protected void SetUp()
     {
+        localPositionTransformAimController = transformAimController.localPosition;
+        transformAimController.parent = null;
     }
 
     public void ResigterObserverDead(ObserverCharacterDead observer)
@@ -126,7 +148,15 @@ public abstract class Character : NetworkBehaviour
     {
         if (gunUsing)
         {
-            gunUsing.Shoot(targetAim,gunUsing.hitCollider);
+            gunUsing.Shoot(GetAim(positionStartAim, forwardAim, out gunUsing.hitCollider), gunUsing.hitCollider);
+        }
+    }
+
+    public void Shoot(Vector3 positionStart, Vector3 forward)
+    {
+        if (gunUsing)
+        {
+            gunUsing.Shoot(GetAim(positionStart, forward, out gunUsing.hitCollider), gunUsing.hitCollider);
         }
     }
 
@@ -136,7 +166,55 @@ public abstract class Character : NetworkBehaviour
         NotifiObserverDead();
     }
 
+    public void MoveAim(float vertical,float horizontal)
+    {
+        transformAimController.position = transform.position + localPositionTransformAimController;
+        transformAimController.rotation = Quaternion.Euler(transformAimController.rotation.eulerAngles.x + vertical, transformAimController.rotation.eulerAngles.y + horizontal, 0);
+        SetTargetAim(positionStartAim, forwardAim);
+    }
 
+    public void MoveAim(Vector3 targert)
+    {
+        transformAimController.position = transform.position + localPositionTransformAimController;
+        transformAimController.LookAt(targert);
+        targetAim = targert;
+    }
+
+    public void SetTargetAim(Vector3 positionStart, Vector3 forward)
+    {
+        Debug.DrawLine(positionStart, positionStart + forward * 1000, Color.black);
+        if (Physics.Raycast(positionStart, forward, out hit, 1000, layerAim))
+        {
+            targetAim = hit.point;
+            if (gunUsing)
+            {
+                gunUsing.hitCollider = hit.collider;
+            }
+        }
+        else
+        {
+            targetAim = transformCamera.position + transformCamera.forward * 10;
+            if (gunUsing)
+            {
+                gunUsing.hitCollider = null;
+            }
+        }
+    }
+
+    public Vector3 GetAim(Vector3 positionStart, Vector3 forward, out  Collider hitCollider)
+    {
+        Debug.DrawLine(positionStart, positionStart + forward * 1000, Color.red);
+        if (Physics.Raycast(positionStart, forward, out hit, 1000, layerAim))
+        {
+            hitCollider = hit.collider;
+            return hit.point;
+        }
+        else
+        {
+            hitCollider = null;
+            return positionStart + forward * 10;
+        }
+    }
 
     protected void MoveNormal()
     {

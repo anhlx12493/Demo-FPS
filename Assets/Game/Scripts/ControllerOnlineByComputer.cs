@@ -20,7 +20,7 @@ public class ControllerOnlineByComputer : NetworkBehaviour
         WritePermission = NetworkVariablePermission.ServerOnly
     });
 
-    NetworkVariableQuaternion rotationCharacterLook = new NetworkVariableQuaternion(new NetworkVariableSettings
+    NetworkVariableVector3 positionAimCharacter = new NetworkVariableVector3(new NetworkVariableSettings
     {
         ReadPermission = NetworkVariablePermission.Everyone,
         WritePermission = NetworkVariablePermission.ServerOnly
@@ -71,9 +71,8 @@ public class ControllerOnlineByComputer : NetworkBehaviour
     private void Start()
     {
         SetCharacter(GetComponent<Character>());
+
     }
-
-
 
     public void SetCharacter(Character character)
     {
@@ -91,8 +90,11 @@ public class ControllerOnlineByComputer : NetworkBehaviour
             {
                 ClientControl();
             }
-            character.cameraFollow = FindObjectOfType<CameraFollow>();
-            character.cameraFollow.transformToFolow = character.transform;
+            Camera.main.GetComponent<CameraFollow>().transformToFolow = character.transformCamera;
+        }
+        if (!IsServer)
+        {
+            GetComponent<Animator>().applyRootMotion = false;
         }
     }
 
@@ -110,6 +112,7 @@ public class ControllerOnlineByComputer : NetworkBehaviour
             {
                 ClientControl();
             }
+            character.MoveAim(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"));
         }
         if (isUp.Value)
         {
@@ -133,7 +136,17 @@ public class ControllerOnlineByComputer : NetworkBehaviour
         }
         if (isShoot.Value)
         {
-            character.Shoot();
+            if (IsOwner)
+            {
+                if (IsServer)
+                {
+                    character.Shoot();
+                }
+                else
+                {
+                    ShootServerRpc(character.positionStartAim, character.forwardAim);
+                }
+            }
         }
         if (IsServer)
         {
@@ -150,21 +163,19 @@ public class ControllerOnlineByComputer : NetworkBehaviour
             positionCharacter.Value = character.transform.position;
             rotationCharacter.Value = character.transform.rotation;
         }
-        else
-        {
-            if (!IsOwner)
-            {
-                character.rotationLook = Quaternion.Lerp(character.rotationLook, rotationCharacterLook.Value, 0.3f);
-            }
-            character.transform.position = Vector3.Lerp(character.transform.position, positionCharacter.Value, 0.3f);
-            character.transform.rotation = Quaternion.Lerp(character.transform.rotation, rotationCharacter.Value, 0.3f);
-        }
+        Synchronized();
     }
 
-    private void OnAnimatorIK(int layerIndex)
+    private void Synchronized()
     {
-        if (IsClient)
+        if (!IsServer)
         {
+            character.transform.position = Vector3.Lerp(character.transform.position, positionCharacter.Value, 0.2f);
+        }
+        if (!IsOwner)
+        {
+            character.transform.rotation = Quaternion.Lerp(character.transform.rotation, rotationCharacter.Value, 0.2f);
+            character.MoveAim(positionAimCharacter.Value);
         }
     }
 
@@ -230,11 +241,8 @@ public class ControllerOnlineByComputer : NetworkBehaviour
             if (isShoot.Value)
                 isShoot.Value = false;
         }
-
-        transformCopyRotate.Rotate(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
-        character.rotationLook = Quaternion.Euler(transformCopyRotate.rotation.eulerAngles.x, transformCopyRotate.rotation.eulerAngles.y, 0);
-        transformCopyRotate.rotation = character.rotationLook;
-        rotationCharacterLook.Value = character.rotationLook;
+        rotationCharacter.Value = character.transform.rotation;
+        positionAimCharacter.Value = character.targetAim;
     }
 
     private void ClientControl()
@@ -335,11 +343,7 @@ public class ControllerOnlineByComputer : NetworkBehaviour
                 ShootServerRpc(_isShoot);
             }
         }
-
-        transformCopyRotate.Rotate(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
-        character.rotationLook = Quaternion.Euler(transformCopyRotate.rotation.eulerAngles.x, transformCopyRotate.rotation.eulerAngles.y, 0);
-        transformCopyRotate.rotation = character.rotationLook;
-        LookServerRpc(character.rotationLook);
+        UpdateRotationCharacterServerRpc(character.transform.rotation,character.targetAim);
     }
 
     [ServerRpc]
@@ -379,19 +383,21 @@ public class ControllerOnlineByComputer : NetworkBehaviour
     }
 
     [ServerRpc]
-    void LookServerRpc(Quaternion value)
+    void ShootServerRpc(Vector3 positionStart,Vector3 forward)
     {
-        rotationCharacterLook.Value = value;
-        if (character)
-        {
-            character.rotationLook = value;
-        }
+        character.Shoot(positionStart, forward);
+    }
+
+    [ServerRpc]
+    void UpdateRotationCharacterServerRpc(Quaternion rotation,Vector3 positionAim)
+    {
+        rotationCharacter.Value = rotation;
+        positionAimCharacter.Value = positionAim;
     }
 
     [ClientRpc]
     void DeadClientRpc()
     {
-        if(character)
-            character.Dead();
+        character.Dead();
     }
 }
